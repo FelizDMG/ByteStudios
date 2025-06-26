@@ -43,7 +43,7 @@ controls.enablePan = true
 
 const loader = new GLTFLoader()
 loader.load(
-    'blender.glb',
+    'https://raw.githubusercontent.com/FelizDMG/ByteStudios/main/models/blender.glb',
     (gltf) => {
         const boundingBox = new THREE.Box3().setFromObject(gltf.scene);
         const height = boundingBox.max.y - boundingBox.min.y;
