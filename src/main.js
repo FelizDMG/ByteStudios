@@ -23,7 +23,7 @@ const renderer = new THREE.WebGLRenderer({
     canvas: document.querySelector('#scene'),
     antialias: true
 })
-renderer.setSize(window.innerWidth, window.innerHeight)
+renderer.setSize(window.innerWidth/2, window.innerHeight/2)
 camera.position.set(0, 0, 30)
 
 const light = new THREE.DirectionalLight(0xffffff, 1)
