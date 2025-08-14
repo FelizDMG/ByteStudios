@@ -27,7 +27,7 @@ renderer.setSize(window.innerWidth/2, window.innerHeight/2)
 camera.position.set(0, 0, 30)
 
 const light = new THREE.DirectionalLight(0xffffff, 1)
-const alight = new THREE.AmbientLight(0xffffff, 0.5)
+const alight = new THREE.AmbientLight(0xffffff, 1)
 light.position.set(0, 1, 2)
 scene.add(light,alight)
 
