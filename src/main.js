@@ -23,7 +23,7 @@ const renderer = new THREE.WebGLRenderer({
     canvas: document.querySelector('#scene'),
     antialias: true
 })
-renderer.setSize(window.innerWidth/2, window.innerHeight/2)
+renderer.setSize(window.innerWidth/1.3, window.innerHeight/1.3)
 camera.position.set(0, 0, 30)
 
 const light = new THREE.DirectionalLight(0xffffff, 1)
@@ -47,7 +47,7 @@ loader.load(
     (gltf) => {
         const boundingBox = new THREE.Box3().setFromObject(gltf.scene);
         const height = boundingBox.max.y - boundingBox.min.y;
-        gltf.scene.position.y = -height / 2;
+        gltf.scene.position.y = -height / 4;
         scene.add(gltf.scene)
     },
     undefined,
