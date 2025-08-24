@@ -5,16 +5,17 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
 
 document.querySelector('#app').innerHTML = `
   <div>
-    <canvas id="scene"></canvas>
-    <h1>Hello Byters!</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
+    <div style="position: relative;">
+      <canvas id="scene"></canvas>
+      <button id="next" style="position: absolute; top: 10px; right: 10px; z-index: 1;">Next</button>
     </div>
+    <h1>Hello Byters!</h1>
     <p class="read-the-docs">
       Byte Studios brought to you by Ruki and Feliz
     </p>
   </div>
 `
+
 
 
 const scene = new THREE.Scene()
@@ -41,20 +42,42 @@ controls.screenSpacePanning = true
 controls.enablePan = true
 
 
+const modelUrls = [
+    'https://raw.githubusercontent.com/FelizDMG/ByteStudios/main/models/model_01.glb',
+    'https://raw.githubusercontent.com/FelizDMG/ByteStudios/main/models/model_02.glb',
+    'https://raw.githubusercontent.com/FelizDMG/ByteStudios/main/models/model_03.glb'
+]
+
+let currentModelIndex = 0
+let currentModel = null
 const loader = new GLTFLoader()
-loader.load(
-    'https://raw.githubusercontent.com/FelizDMG/ByteStudios/main/models/blender.glb',
-    (gltf) => {
-        const boundingBox = new THREE.Box3().setFromObject(gltf.scene);
-        const height = boundingBox.max.y - boundingBox.min.y;
-        gltf.scene.position.y = -height / 4;
-        scene.add(gltf.scene)
-    },
-    undefined,
-    (error) => {
-        console.error('Error loading model:', error)
-    }
-)
+
+function loadModel(url) {
+    loader.load(
+        url,
+        (gltf) => {
+            if (currentModel) {
+                scene.remove(currentModel)
+            }
+            const boundingBox = new THREE.Box3().setFromObject(gltf.scene)
+            const height = boundingBox.max.y - boundingBox.min.y
+            gltf.scene.position.y = -height / 4
+            currentModel = gltf.scene
+            scene.add(currentModel)
+        },
+        undefined,
+        (error) => {
+            console.error('Error loading model:', error)
+        }
+    )
+}
+
+loadModel(modelUrls[currentModelIndex])
+
+document.querySelector('#next').addEventListener('click', () => {
+    currentModelIndex = (currentModelIndex + 1) % modelUrls.length
+    loadModel(modelUrls[currentModelIndex])
+})
 
 function animate() {
     requestAnimationFrame(animate)
@@ -63,3 +86,5 @@ function animate() {
 }
 
 animate()
+
+
