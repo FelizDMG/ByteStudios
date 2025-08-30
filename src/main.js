@@ -7,7 +7,8 @@ document.querySelector('#app').innerHTML = `
   <div>
     <div style="position: relative;">
       <canvas id="scene"></canvas>
-      <button id="next" style="position: absolute; top: 10px; right: 10px; z-index: 1;">Next</button>
+      <button id="next" style="position: absolute; bottom: 20px; right: 10px; z-index: 1;">Next</button>
+      <button id="prev" style="position: absolute; bottom: 20px; left: 10px; z-index: 1;">Prev</button>
     </div>
     <h1>Hello Byters!</h1>
     <p class="read-the-docs">
@@ -25,6 +26,7 @@ const renderer = new THREE.WebGLRenderer({
     antialias: true
 })
 renderer.setSize(window.innerWidth/1.3, window.innerHeight/1.3)
+renderer.setClearColor(0x545454, 1)
 camera.position.set(0, 0, 30)
 
 const light = new THREE.DirectionalLight(0xffffff, 1)
@@ -52,6 +54,10 @@ let currentModelIndex = 0
 let currentModel = null
 const loader = new GLTFLoader()
 
+function resetCamera() {
+    camera.position.set(0, 0, 30)
+    camera.lookAt(0, 0, 0)
+}
 function loadModel(url) {
     loader.load(
         url,
@@ -64,6 +70,7 @@ function loadModel(url) {
             gltf.scene.position.y = -height / 4
             currentModel = gltf.scene
             scene.add(currentModel)
+            resetCamera()
         },
         undefined,
         (error) => {
@@ -76,6 +83,10 @@ loadModel(modelUrls[currentModelIndex])
 
 document.querySelector('#next').addEventListener('click', () => {
     currentModelIndex = (currentModelIndex + 1) % modelUrls.length
+    loadModel(modelUrls[currentModelIndex])
+})
+document.querySelector('#prev').addEventListener('click', () => {
+    currentModelIndex = (currentModelIndex - 1 + modelUrls.length) % modelUrls.length
     loadModel(modelUrls[currentModelIndex])
 })
 
