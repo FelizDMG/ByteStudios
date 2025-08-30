@@ -2,6 +2,7 @@ import './style.css'
 import * as THREE from 'three'
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader'
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
+import gsap from 'gsap'
 
 document.querySelector('#app').innerHTML = `
   <div>
@@ -15,6 +16,7 @@ document.querySelector('#app').innerHTML = `
       Byte Studios brought to you by Ruki and Feliz
     </p>
   </div>
+  
 `
 
 
@@ -55,8 +57,21 @@ let currentModel = null
 const loader = new GLTFLoader()
 
 function resetCamera() {
-    camera.position.set(0, 0, 30)
-    camera.lookAt(0, 0, 0)
+    gsap.to(camera.position, {
+        duration: .5,
+        x: 0,
+        y: 0,
+        z: 30,
+        ease: "power1.inOut"
+    });
+    gsap.to(controls.target, {
+        duration: .5,
+        x: 0,
+        y: 0,
+        z: 0,
+        ease: "power1.inOut",
+        onUpdate: () => camera.lookAt(controls.target)
+    });
 }
 function loadModel(url) {
     loader.load(
