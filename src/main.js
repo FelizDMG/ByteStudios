@@ -52,7 +52,11 @@ const modelUrls = [
     'https://raw.githubusercontent.com/FelizDMG/ByteStudios/main/models/model_03.glb'
 ]
 
-let currentModelIndex = 0
+const urlParams = new URLSearchParams(window.location.search);
+let currentModelIndex = parseInt(urlParams.get('id')) || 0
+if (currentModelIndex >= modelUrls.length) {
+    currentModelIndex = 0
+}
 let currentModel = null
 const loader = new GLTFLoader()
 
@@ -96,13 +100,22 @@ function loadModel(url) {
 
 loadModel(modelUrls[currentModelIndex])
 
+// Update URL when model changes
+function updateURL(index) {
+    const newURL = new URL(window.location.href);
+    newURL.searchParams.set('id', index);
+    window.history.pushState({}, '', newURL);
+}
+
 document.querySelector('#next').addEventListener('click', () => {
     currentModelIndex = (currentModelIndex + 1) % modelUrls.length
     loadModel(modelUrls[currentModelIndex])
+    updateURL(currentModelIndex)
 })
 document.querySelector('#prev').addEventListener('click', () => {
     currentModelIndex = (currentModelIndex - 1 + modelUrls.length) % modelUrls.length
     loadModel(modelUrls[currentModelIndex])
+    updateURL(currentModelIndex)
 })
 
 function animate() {
